@@ -9,6 +9,9 @@ import SampleOne from './components/practices/basic/SampleOne.vue'
 import SampleTwo from './components/practices/basic/SampleTwo.vue'
 import DirectiveSameNameShorthand from './components/practices/basic/DirectiveSameNameShorthand.vue'
 import DirectiveIf from './components/practices/basic/DirectiveIf.vue'
+import DirectiveShow from './components/practices/basic/DirectiveShow.vue'
+import DirectiveFor from './components/practices/basic/DirectiveFor.vue'
+import DirectivePre from './components/practices/basic/DirectivePre.vue'
 </script>
 
 <template>
@@ -22,4 +25,7 @@ import DirectiveIf from './components/practices/basic/DirectiveIf.vue'
   <DirectiveStyleBinding />
   <DirectiveSameNameShorthand />
   <DirectiveIf />
+  <DirectiveShow />
+  <DirectiveFor />
+  <DirectivePre />
 </template>
