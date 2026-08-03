@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 
 const weatherList = ref([
   { id: 'city_01', name: '서울', temp: 28, status: '맑음' },
@@ -9,9 +9,9 @@ const weatherList = ref([
 
 const searchQuery = ref('')
 
-const selectedInfo = ref('카드를 클릭하거나 검색해 보세요')
+const selectedCityInfo = ref('카드를 클릭하거나 검색해 보세요')
 const handleCardClick = (cityName) => {
-  selectedInfo.value = `${cityName}이 선택되었습니다.`
+  selectedCityInfo.value = `${cityName}이 선택되었습니다.`
 }
 
 const showDetail = (cityName, status) => {
@@ -21,11 +21,23 @@ const showDetail = (cityName, status) => {
 const handleSearchInput = (e) => {
   searchQuery.value = e.target.value
 }
+
+const filteredWeatherList = computed(() => {
+  return weatherList.value.filter((city) => city.name.includes(searchQuery.value))
+})
+
+watch(selectedCityInfo, (newValue, oldValue) => {
+  console.log(`👁️ [watch 감지] 상태 바 문구 변경: "${oldValue}" -> "${newValue}"`)
+})
+
+watchEffect(() => {
+  console.log(`🤖 [watchEffect 자동 호출] 현재 검색어 '${searchQuery.value}'로 필터링합니다.`)
+})
 </script>
 
 <template>
   <div class="weather-mockup">
-    <h2>🌤️ 과제 1: 날씨 (Mockup)</h2>
+    <h2>🌤️ 과제 2: 날씨 (컴포지션)</h2>
 
     <section class="card-box">
       <h3>🔍 도시 검색</h3>
@@ -43,27 +55,31 @@ const handleSearchInput = (e) => {
 
     <section class="card-box">
       <h3>🗺️ 지역별 날씨 현황</h3>
-      <div
-        v-for="city in weatherList"
-        :key="city.id"
-        class="weather-card"
-        @click="handleCardClick(city.name)"
-      >
-        <div class="card-info">
-          <p class="city-name">{{ city.name }} {{ city.status }}</p>
-          <p class="city-temp">현재 기온: {{ city.temp }}°C</p>
 
-          <span v-if="city.temp >= 25" class="badge badge-hot">🔥 더움 (25도 이상)</span>
-          <span v-else class="badge badge-cool">❄️ 선선함 (25도 미만)</span>
+      <template v-if="filteredWeatherList.length > 0">
+        <div
+          v-for="city in filteredWeatherList"
+          :key="city.id"
+          class="weather-card"
+          @click="handleCardClick(city.name)"
+        >
+          <div class="card-info">
+            <p class="city-name">{{ city.name }} {{ city.status }}</p>
+            <p class="city-temp">현재 기온: {{ city.temp }}°C</p>
+
+            <span v-if="city.temp >= 25" class="badge badge-hot">🔥 더움 (25도 이상)</span>
+            <span v-else class="badge badge-cool">❄️ 선선함 (25도 미만)</span>
+          </div>
+
+          <button class="detail-btn" @click.stop="showDetail(city.name, city.status)">
+            상세보기
+          </button>
         </div>
-
-        <button class="detail-btn" @click.stop="showDetail(city.name, city.status)">
-          상세보기
-        </button>
-      </div>
+      </template>
+      <p v-else class="empty-message">'{{ searchQuery }}'와 일치하는 도시가 없습니다.</p>
     </section>
 
-    <p class="status-bar">{{ selectedInfo }}</p>
+    <p class="status-bar">{{ selectedCityInfo }}</p>
   </div>
 </template>
 
@@ -187,5 +203,12 @@ const handleSearchInput = (e) => {
   color: var(--color-success);
   font-size: var(--font-size-sm);
   text-align: center;
+}
+
+.empty-message {
+  padding: var(--space-5);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
 }
 </style>

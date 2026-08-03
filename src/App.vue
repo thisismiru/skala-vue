@@ -31,6 +31,7 @@ import ComputedWatchersMultiSourceWatch from './components/practices/composition
 import ComputedWatchersDeepWatch from './components/practices/composition-api/ComputedWatchersDeepWatch.vue'
 import ComputedWatchersReactiveWatch from './components/practices/composition-api/ComputedWatchersReactiveWatch.vue'
 import ComputedWatchersWatchEffect from './components/practices/composition-api/ComputedWatchersWatchEffect.vue'
+import ComponentLifeCycleHookParent from './components/practices/component/ComponentLifeCycleHookParent.vue'
 </script>
 
 <template>
@@ -66,4 +67,5 @@ import ComputedWatchersWatchEffect from './components/practices/composition-api/
   <ComputedWatchersDeepWatch />
   <ComputedWatchersReactiveWatch />
   <ComputedWatchersWatchEffect />
+  <ComponentLifeCycleHookParent />
 </template>
