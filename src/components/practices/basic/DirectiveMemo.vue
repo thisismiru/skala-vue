@@ -1,7 +1,7 @@
 <script setup>
-  import { ref } from 'vue'
-  const name = ref('홍길동')
-  const age = ref(20)
+import { ref } from 'vue'
+const name = ref('홍길동')
+const age = ref(20)
 </script>
 <template>
   <div class="practice-section">
