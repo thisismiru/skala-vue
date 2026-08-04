@@ -39,8 +39,8 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="weather-mockup">
-    <h2>🌤️ 과제 2: 날씨 (컴포지션)</h2>
+  <div class="weather-dashboard">
+    <h2 class="dashboard-title">🌤️ 과제 3: 날씨 (컴포넌트)</h2>
 
     <BaseDashboardCard>
       <h3>🔍 도시 검색</h3>
@@ -66,14 +66,14 @@ watchEffect(() => {
 </template>
 
 <style scoped>
-.weather-mockup {
+.weather-dashboard {
   max-width: 480px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
-.weather-mockup h2 {
+.dashboard-title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-heading);
