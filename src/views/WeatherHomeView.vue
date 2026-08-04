@@ -1,8 +1,12 @@
 <script setup>
 import { ref, computed, watch, watchEffect } from 'vue'
-import BaseDashboardCard from './BaseDashboardCard.vue'
-import SearchBar from './SearchBar.vue'
-import WeatherCard from './WeatherCard.vue'
+import { useRoute, useRouter } from 'vue-router'
+import BaseDashboardCard from '@/components/exercise/BaseDashboardCard.vue'
+import SearchBar from '@/components/exercise/SearchBar.vue'
+import WeatherCard from '@/components/exercise/WeatherCard.vue'
+
+const route = useRoute()
+const router = useRouter()
 
 const weatherList = ref([
   { id: 'city_01', name: '서울', temp: 28, status: '맑음' },
@@ -10,18 +14,24 @@ const weatherList = ref([
   { id: 'city_03', name: '부산', temp: 26, status: '구름' },
 ])
 
-const searchQuery = ref('')
+const searchQuery = ref(route.query.search ?? '')
+watch(searchQuery, (newQuery) => {
+  router.replace({
+    query: newQuery ? { search: newQuery } : {},
+  })
+})
 
 const selectedCityInfo = ref('카드를 클릭하거나 검색해 보세요')
 
 const handleSelectedCard = (cityId) => {
-  const city = weatherList.value.find((c) => c.id === cityId)
+  const city = weatherList.value.find((city) => city.id === cityId)
+  if (!city) return
+
   selectedCityInfo.value = `${city.name}이 선택되었습니다.`
 }
 
-const showDetail = (cityId) => {
-  const city = weatherList.value.find((c) => c.id === cityId)
-  window.alert(`${city.name}의 현재 날씨는 [${city.status}] 상태입니다.`)
+const goDetail = (cityId) => {
+  router.push({ name: 'WeatherDetail', params: { cityId } })
 }
 
 const filteredWeatherList = computed(() => {
@@ -40,8 +50,6 @@ watchEffect(() => {
 
 <template>
   <div class="weather-dashboard">
-    <h2 class="dashboard-title">🌤️ 과제 3: 날씨 (컴포넌트)</h2>
-
     <BaseDashboardCard>
       <h3>🔍 도시 검색</h3>
       <SearchBar :query="searchQuery" @update-query="searchQuery = $event" />
@@ -55,7 +63,7 @@ watchEffect(() => {
           :key="city.id"
           :city-item="city"
           @select-card="handleSelectedCard"
-          @click-detail="showDetail"
+          @click-detail="goDetail"
         />
       </template>
       <p v-else class="empty-message">'{{ searchQuery }}'와 일치하는 도시가 없습니다.</p>
@@ -72,11 +80,6 @@ watchEffect(() => {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-}
-.dashboard-title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-heading);
 }
 
 .status-bar {
