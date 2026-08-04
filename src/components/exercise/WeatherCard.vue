@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { useConfigStore } from '@/stores/configStore'
 
 const props = defineProps({
   cityItem: {
@@ -10,18 +11,27 @@ const props = defineProps({
 
 const emit = defineEmits(['select-card', 'click-detail'])
 
+const configStore = useConfigStore()
+
 const HOT_THRESHOLD = 25
 const isHot = computed(() => props.cityItem.temp >= HOT_THRESHOLD)
+
+const displayTemp = computed(() => configStore.toDisplayTemp(props.cityItem.temp))
+const displayThreshold = computed(() => configStore.toDisplayTemp(HOT_THRESHOLD))
 </script>
 
 <template>
   <div class="weather-card" @click="emit('select-card', cityItem.id)">
     <div class="card-info">
       <p class="city-name">{{ cityItem.name }} ({{ cityItem.status }})</p>
-      <p class="city-temp">현재 기온: {{ cityItem.temp }}°C</p>
+      <p class="city-temp">현재 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</p>
 
-      <span v-if="isHot" class="badge badge-hot">🔥 더움 ({{ HOT_THRESHOLD }}도 이상)</span>
-      <span v-else class="badge badge-cool">❄️ 선선함 ({{ HOT_THRESHOLD }}도 미만)</span>
+      <span v-if="isHot" class="badge badge-hot">
+        🔥 더움 ({{ displayThreshold }}{{ configStore.unitSymbol }} 이상)
+      </span>
+      <span v-else class="badge badge-cool">
+        ❄️ 선선함 ({{ displayThreshold }}{{ configStore.unitSymbol }} 미만)
+      </span>
     </div>
 
     <button class="detail-btn" @click.stop="emit('click-detail', cityItem.id)">상세보기</button>

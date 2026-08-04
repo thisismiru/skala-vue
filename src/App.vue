@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import UnitToggler from '@/components/exercise/UnitToggler.vue'
 </script>
 
 <template>
@@ -11,6 +12,8 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/about">ℹ️ 서비스 소개</RouterLink>
       <span class="nav-divider">|</span>
       <RouterLink to="/practices">🧪 실습</RouterLink>
+
+      <UnitToggler class="nav-unit" />
     </nav>
   </header>
   <main class="app-main">
@@ -63,5 +66,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
 .nav-divider {
   color: var(--color-border);
+}
+
+.nav-unit {
+  margin-left: auto;
 }
 </style>

@@ -1,9 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useConfigStore } from '@/stores/configStore'
 
 const route = useRoute()
 const router = useRouter()
+const configStore = useConfigStore()
 
 const CITY_DETAIL_LIST = [
   {
@@ -49,10 +51,14 @@ const goBack = () => {
 const goHome = () => {
   router.push({ name: 'WeatherHome' })
 }
+
+const displayTemp = computed(() =>
+  cityDetail.value ? configStore.toDisplayTemp(cityDetail.value.temp) : null,
+)
 </script>
 
 <template>
-  <template class="detail-view">
+  <section class="detail-view">
     <h2>📊 지역별 상세 기상 관측 정보</h2>
 
     <dl v-if="cityDetail" class="detail-list">
@@ -62,7 +68,7 @@ const goHome = () => {
       </div>
       <div>
         <dt>실시간 기온</dt>
-        <dd>{{ cityDetail.temp }}°C</dd>
+        <dd>{{ displayTemp }}{{ configStore.unitSymbol }}</dd>
       </div>
       <div>
         <dt>기상 현황</dt>
@@ -82,7 +88,7 @@ const goHome = () => {
 
     <button @click="goBack">← 이전 페이지로 돌아가기</button>
     <button @click="goHome">← 메인 대시보드로 돌아가기</button>
-  </template>
+  </section>
 </template>
 
 <style scoped>
