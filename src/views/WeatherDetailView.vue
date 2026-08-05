@@ -2,47 +2,39 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useConfigStore } from '@/stores/configStore'
+import { findCityById } from '@/constants/cities'
+import { fetchWeatherByCity } from '@/api/weatherApi'
 
 const route = useRoute()
 const router = useRouter()
 const configStore = useConfigStore()
 
-const CITY_DETAIL_LIST = [
-  {
-    id: 'city_01',
-    name: '서울',
-    region: '대한민국 서울특별시',
-    temp: 28,
-    status: '맑음',
-    humidity: 55,
-    wind: 2.5,
-  },
-  {
-    id: 'city_02',
-    name: '수원',
-    region: '대한민국 경기도 수원시',
-    temp: 24,
-    status: '비',
-    humidity: 82,
-    wind: 3.1,
-  },
-  {
-    id: 'city_03',
-    name: '부산',
-    region: '대한민국 부산광역시',
-    temp: 26,
-    status: '구름',
-    humidity: 68,
-    wind: 4.2,
-  },
-]
-
 const cityDetail = ref(null)
+const isLoading = ref(false)
+const errorMessage = ref('')
 
-onMounted(() => {
-  const cityId = route.params.cityId
-  cityDetail.value = CITY_DETAIL_LIST.find((city) => city.id === cityId) ?? null
-})
+const loadDetail = async () => {
+  const cityMeta = findCityById(route.params.cityId)
+
+  if (!cityMeta) {
+    errorMessage.value = `'${route.params.cityId}'에 해당하는 관측 정보가 없습니다.`
+    return
+  }
+
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    cityDetail.value = await fetchWeatherByCity(cityMeta)
+  } catch (error) {
+    console.error('[WeatherDetailView] 상세 조회 실패:', error)
+    errorMessage.value = '날씨 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(loadDetail)
 
 const goBack = () => {
   router.back()
@@ -61,7 +53,11 @@ const displayTemp = computed(() =>
   <section class="detail-view">
     <h2>📊 지역별 상세 기상 관측 정보</h2>
 
-    <dl v-if="cityDetail" class="detail-list">
+    <p v-if="isLoading" class="detail-state">⏳ 관측 정보를 불러오는 중...</p>
+
+    <p v-else-if="errorMessage" class="detail-state is-error">⚠️ {{ errorMessage }}</p>
+
+    <dl v-else-if="cityDetail" class="detail-list">
       <div>
         <dt>📍 지정 지역</dt>
         <dd>{{ cityDetail.region }}</dd>
@@ -80,14 +76,14 @@ const displayTemp = computed(() =>
       </div>
       <div>
         <dt>현재 풍속</dt>
-        <dd>{{ cityDetail.wind }}m/s</dd>
+        <dd>{{ cityDetail.windSpeed }}m/s</dd>
       </div>
     </dl>
 
-    <p v-else class="detail-empty">'{{ route.params.cityId }}'에 해당하는 관측 정보가 없습니다.</p>
-
-    <button @click="goBack">← 이전 페이지로 돌아가기</button>
-    <button @click="goHome">← 메인 대시보드로 돌아가기</button>
+    <div class="detail-actions">
+      <button @click="goBack">← 이전 페이지로 돌아가기</button>
+      <button @click="goHome">🏠 메인 대시보드로 돌아가기</button>
+    </div>
   </section>
 </template>
 
@@ -116,9 +112,13 @@ const displayTemp = computed(() =>
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
 }
-.detail-empty {
+.detail-state {
   padding: var(--space-5);
   text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+.detail-state.is-error {
   color: var(--color-danger);
 }
 .detail-actions {

@@ -1,6 +1,8 @@
 <script setup>
-import { ref, computed, watch, watchEffect } from 'vue'
+import { ref, computed, watch, watchEffect, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { CITIES } from '@/constants/cities'
+import { fetchWeatherList } from '@/api/weatherApi'
 import BaseDashboardCard from '@/components/exercise/BaseDashboardCard.vue'
 import SearchBar from '@/components/exercise/SearchBar.vue'
 import WeatherCard from '@/components/exercise/WeatherCard.vue'
@@ -8,11 +10,9 @@ import WeatherCard from '@/components/exercise/WeatherCard.vue'
 const route = useRoute()
 const router = useRouter()
 
-const weatherList = ref([
-  { id: 'city_01', name: '서울', temp: 28, status: '맑음' },
-  { id: 'city_02', name: '수원', temp: 24, status: '비' },
-  { id: 'city_03', name: '부산', temp: 26, status: '구름' },
-])
+const weatherList = ref([])
+const isLoading = ref(false)
+const errorMessage = ref('')
 
 const searchQuery = ref(route.query.search ?? '')
 watch(searchQuery, (newQuery) => {
@@ -46,6 +46,22 @@ watch(selectedCityInfo, (newValue, oldValue) => {
 watchEffect(() => {
   console.log(`🤖 [watchEffect 자동 호출] 현재 검색어 '${searchQuery.value}'로 필터링합니다.`)
 })
+
+const loadWeather = async () => {
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    weatherList.value = await fetchWeatherList(CITIES)
+  } catch (error) {
+    console.error('[WeatherHomeView] 날씨 조회 실패: ', error)
+    errorMessage.value = '날씨 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(loadWeather)
 </script>
 
 <template>
@@ -57,7 +73,15 @@ watchEffect(() => {
 
     <BaseDashboardCard>
       <h3>🗺️ 지역별 날씨 현황</h3>
-      <template v-if="filteredWeatherList.length > 0">
+
+      <p v-if="isLoading" class="state-message">⏳ 날씨정보를 불러오는 중...</p>
+
+      <p v-else-if="errorMessage" class="state-message is-error">
+        ⚠️ {{ errorMessage }}
+        <button @click="loadWeather">다시 시도</button>
+      </p>
+
+      <template v-else-if="filteredWeatherList.length > 0">
         <WeatherCard
           v-for="city in filteredWeatherList"
           :key="city.id"
@@ -66,7 +90,6 @@ watchEffect(() => {
           @click-detail="goDetail"
         />
       </template>
-      <p v-else class="empty-message">'{{ searchQuery }}'와 일치하는 도시가 없습니다.</p>
     </BaseDashboardCard>
 
     <p class="status-bar">{{ selectedCityInfo }}</p>
@@ -91,10 +114,13 @@ watchEffect(() => {
   text-align: center;
 }
 
-.empty-message {
+.state-message {
   padding: var(--space-5);
   text-align: center;
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+}
+.state-message.is-error {
+  color: var(--color-danger);
 }
 </style>
