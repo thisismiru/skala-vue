@@ -16,7 +16,9 @@
 .card-box :slotted(h3) {
   position: relative;
   margin-bottom: var(--space-3);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
 }
 </style>

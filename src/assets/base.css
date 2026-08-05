@@ -101,10 +101,10 @@
 }
 
 :root {
-  --sky-dawn: linear-gradient(165deg, #3d4a7a 0%, #b56576 55%, #e8a87c 100%);
-  --sky-morning: linear-gradient(165deg, #4a9fd8 0%, #94cdec 55%, #ffe0b2 100%);
-  --sky-day: linear-gradient(165deg, #1e6fc4 0%, #5aa9e0 55%, #a8d8f5 100%);
-  --sky-sunset: linear-gradient(165deg, #1f2847 0%, #a84a52 55%, #e89b4f 100%);
+  --sky-dawn: linear-gradient(165deg, #323d68 0%, #a3586e 55%, #cf8a62 100%);
+  --sky-morning: linear-gradient(165deg, #2e7cba 0%, #64a8d6 55%, #dcb98a 100%);
+  --sky-day: linear-gradient(165deg, #15589f 0%, #4292cc 55%, #7fb8e3 100%);
+  --sky-sunset: linear-gradient(165deg, #1c2440 0%, #9c4249 55%, #d8853f 100%);
   --sky-night: linear-gradient(165deg, #0b1120 0%, #16223f 55%, #26355c 100%);
 
   --glass-bg: rgba(255, 255, 255, 0.13);
@@ -122,7 +122,7 @@
   --text-primary: rgba(255, 255, 255, 0.96);
   --text-secondary: rgba(255, 255, 255, 0.72);
   --text-tertiary: rgba(255, 255, 255, 0.5);
-  --text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.22);
 }
 
 *,

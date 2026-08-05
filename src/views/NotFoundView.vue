@@ -1,14 +1,15 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router'
+import { CloudOff } from 'lucide-vue-next'
 
 const route = useRoute()
 </script>
 
 <template>
   <section class="notfound-view">
-    <p class="notfound-icon">🌞❓</p>
+    <CloudOff class="notfound-icon" :size="64" aria-hidden="true" />
 
-    <h2>페이지를 찾을 수 없습니다.</h2>
+    <h2 class="notfound-title">페이지를 찾을 수 없습니다</h2>
     <p class="notfound-desc">
       요청하신 주소가 존재하지 않거나,<br />
       아직 개발되지 않았습니다.
@@ -32,27 +33,49 @@ const route = useRoute()
   gap: var(--space-3);
   text-align: center;
 }
+
 .notfound-icon {
-  font-size: var(--font-size-2xl);
+  color: var(--text-secondary);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
 }
+
+.notfound-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+}
+
 .notfound-desc {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
+
 .notfound-path {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  background: var(--glass-bg);
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
 }
+
+.notfound-path code {
+  color: var(--text-primary);
+}
+
 .home-link {
   margin-top: var(--space-3);
   padding: var(--space-2) var(--space-5);
-  border-radius: var(--radius-sm);
-  background: var(--color-primary);
-  color: var(--color-text-inverse);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  background: var(--glass-bg);
+  color: var(--text-primary);
   font-size: var(--font-size-sm);
+  transition: background-color var(--duration) var(--ease);
 }
+
 .home-link:hover {
   text-decoration: none;
-  background: var(--color-primary-hover);
+  background: var(--glass-bg-hover);
 }
 </style>

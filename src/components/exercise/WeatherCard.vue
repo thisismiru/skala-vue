@@ -1,7 +1,9 @@
 <script setup>
 import { computed } from 'vue'
+import { ChevronRight } from 'lucide-vue-next'
 import { useConfigStore } from '@/stores/configStore'
 import { useLocalTime } from '@/composables/useLocalTime'
+import { getWeatherIcon } from '@/utils/weatherIcon'
 
 const props = defineProps({
   cityItem: {
@@ -16,7 +18,11 @@ const configStore = useConfigStore()
 
 const { timeLabel, phase } = useLocalTime(() => props.cityItem)
 
+const iconUrl = computed(() => getWeatherIcon(props.cityItem.icon))
+
 const displayTemp = computed(() => configStore.toDisplayTemp(props.cityItem.temp))
+const displayTempMin = computed(() => configStore.toDisplayTemp(props.cityItem.tempMin))
+const displayTempMax = computed(() => configStore.toDisplayTemp(props.cityItem.tempMax))
 
 const tempLevel = computed(() => {
   const celsius = props.cityItem.temp
@@ -33,20 +39,32 @@ const tempLevel = computed(() => {
   <article
     class="weather-card glass"
     :class="`is-${phase}`"
-    @click="emit('select-card', cityItem.id)"
+    tabindex="0"
+    @click="emit('click-detail', cityItem.id)"
+    @keyup.enter="emit('click-detail', cityItem.id)"
+    @mouseenter="emit('select-card', cityItem.id)"
+    @focus="emit('select-card', cityItem.id)"
   >
     <header class="card-head">
-      <h4 class="city-name">{{ cityItem.name }}</h4>
-      <p class="city-time text-secondary">{{ timeLabel }}</p>
+      <div class="head-main">
+        <h4 class="city-name">{{ cityItem.name }}</h4>
+        <p class="city-time text-secondary">{{ timeLabel }}</p>
+      </div>
+      <ChevronRight class="head-chevron" :size="18" aria-hidden="true" />
     </header>
 
-    <p class="city-temp" :class="`is-${tempLevel}`">
-      {{ displayTemp }}<span class="temp-unit">{{ configStore.unitSymbol }}</span>
-    </p>
+    <div class="temp-row">
+      <img class="weather-glyph" :src="iconUrl" :alt="cityItem.status" />
+      <p class="city-temp" :class="`is-${tempLevel}`">
+        {{ displayTemp }}<span class="temp-unit">{{ configStore.unitSymbol }}</span>
+      </p>
+    </div>
 
     <footer class="card-foot">
       <span class="city-status text-secondary">{{ cityItem.status }}</span>
-      <button class="detail-btn" @click.stop="emit('click-detail', cityItem.id)">상세보기</button>
+      <span v-if="cityItem.tempMax != null" class="temp-range text-secondary">
+        최고 {{ displayTempMax }}° 최저 {{ displayTempMin }}°
+      </span>
     </footer>
   </article>
 </template>
@@ -107,10 +125,15 @@ const tempLevel = computed(() => {
   transform: scale(0.98);
 }
 
+.weather-card:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
 .card-head {
   position: relative;
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-2);
 }
@@ -125,12 +148,42 @@ const tempLevel = computed(() => {
   font-variant-numeric: tabular-nums;
 }
 
-.city-temp {
+.head-chevron {
+  flex-shrink: 0;
+  margin-top: var(--space-1);
+  color: var(--text-tertiary);
+  transition:
+    color var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+
+.weather-card:hover .head-chevron {
+  color: var(--text-primary);
+  transform: translateX(3px);
+}
+
+.temp-row {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.weather-glyph {
+  width: 72px;
+  height: 72px;
+  margin: -8px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.18));
+}
+
+.city-temp {
   font-size: clamp(40px, 7vw, 56px);
   font-weight: 200;
   letter-spacing: -0.04em;
   line-height: 1.1;
+  font-variant-numeric: tabular-nums;
 }
 
 .city-temp.is-hot {
@@ -169,26 +222,13 @@ const tempLevel = computed(() => {
   margin-top: auto;
 }
 
-.city-status {
+.city-status,
+.temp-range {
   font-size: var(--font-size-sm);
 }
 
-.detail-btn {
+.temp-range {
   flex-shrink: 0;
-  padding: var(--space-1) var(--space-3);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  background: transparent;
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition:
-    color var(--duration) var(--ease),
-    background-color var(--duration) var(--ease);
-}
-
-.detail-btn:hover {
-  color: var(--text-primary);
-  background: var(--glass-bg-hover);
+  font-variant-numeric: tabular-nums;
 }
 </style>

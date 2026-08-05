@@ -10,7 +10,12 @@ const isPlain = computed(() => route.path.startsWith('/practices'))
 
 const { phase } = useSky()
 
-const themeOverrides = {}
+const themeOverrides = {
+  Skeleton: {
+    color: 'rgba(255, 255, 255, 0.12)',
+    colorEnd: 'rgba(255, 255, 255, 0.24)',
+  },
+}
 </script>
 
 <template>
@@ -26,16 +31,13 @@ const themeOverrides = {}
       </div>
 
       <header class="app-header">
-        <h1 class="app-title">🌤️ 과제 4: 라우터 적용</h1>
+        <h1 class="app-title">날씨 대시보드</h1>
         <nav class="app-nav">
-          <RouterLink to="/">🗺️ 날씨 대시보드</RouterLink>
-          <span class="nav-divider">|</span>
-          <RouterLink to="/about">ℹ️ 서비스 소개</RouterLink>
-          <span class="nav-divider">|</span>
-          <RouterLink to="/practices">🧪 실습</RouterLink>
-
-          <UnitToggler class="nav-unit" />
+          <RouterLink to="/">대시보드</RouterLink>
+          <RouterLink to="/about">소개</RouterLink>
+          <RouterLink to="/practices">실습</RouterLink>
         </nav>
+        <UnitToggler class="nav-unit" />
       </header>
       <main class="app-main">
         <RouterView />
@@ -46,53 +48,45 @@ const themeOverrides = {}
 
 <style scoped>
 .app-header {
-  padding-bottom: var(--space-4);
-  margin-bottom: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  margin-bottom: var(--space-4);
+}
+
+.plain-shell .app-header {
   border-bottom: 1px solid var(--color-border-soft);
 }
 
-.sky-shell .app-header {
-  border-bottom-color: var(--glass-border);
-}
-
-.sky-shell .app-nav a {
-  color: var(--text-secondary);
-}
-
-.sky-shell .app-nav a:hover,
-.sky-shell .app-nav a.router-link-exact-active {
-  color: var(--text-primary);
-  border-bottom-color: var(--text-primary);
-}
-
-.sky-shell .nav-divider {
-  color: var(--text-tertiary);
-}
-
 .app-title {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
   color: var(--color-heading);
-  text-align: center;
+}
+
+.sky-shell .app-title {
+  color: var(--text-primary);
+  text-shadow: var(--text-shadow);
 }
 
 .app-nav {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-3);
-  margin-top: var(--space-4);
+  gap: var(--space-1);
+  margin-left: auto;
 }
 
 .app-nav a {
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-soft);
-  border-bottom: 2px solid transparent;
   transition:
     color var(--duration) var(--ease),
-    border-color var(--duration) var(--ease);
+    background-color var(--duration) var(--ease);
 }
 
 .app-nav a:hover {
@@ -102,14 +96,25 @@ const themeOverrides = {}
 
 .app-nav a.router-link-exact-active {
   color: var(--color-primary);
-  border-bottom-color: var(--color-primary);
+  background: var(--color-background-mute, rgba(0, 0, 0, 0.06));
 }
 
-.nav-divider {
-  color: var(--color-border);
+.sky-shell .app-nav a {
+  color: var(--text-secondary);
+  text-shadow: var(--text-shadow);
+}
+
+.sky-shell .app-nav a:hover {
+  color: var(--text-primary);
+  background: var(--glass-bg);
+}
+
+.sky-shell .app-nav a.router-link-exact-active {
+  color: var(--text-primary);
+  background: var(--glass-bg);
 }
 
 .nav-unit {
-  margin-left: auto;
+  flex-shrink: 0;
 }
 </style>
