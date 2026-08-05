@@ -55,3 +55,9 @@
 - **선택**: 본편에서 쓰지 않는 Element Plus를 제거하지 않고, `/practices` 라우트(수업 실습·Code Challenge)의 의존성으로 유지한다.
 - **이유**: 실습 결과물은 학습 이력이며 과제 제출물의 일부다. `unplugin-vue-components` 트리셰이킹으로 본편 번들에는 포함되지 않는다.
 - **한계**: `node_modules`와 설치 시간이 늘어난다.
+
+## 10. Pretendard 웹폰트 CDN 로드
+
+- **선택**: 시스템 폰트에만 의존하지 않고 Pretendard Variable을 jsDelivr CDN에서 로드한다.
+- **이유**: 온도 숫자의 얇은 웨이트(200)가 디자인 시그니처인데, Windows의 맑은 고딕에는 얇은 웨이트가 없어 렌더링이 무너진다. 가변 폰트 + dynamic subset이라 필요한 글리프만 내려받는다.
+- **한계**: 외부 CDN 의존이 생긴다. CDN 장애 시에는 폰트 스택의 시스템 폰트로 자연스럽게 강등된다.
