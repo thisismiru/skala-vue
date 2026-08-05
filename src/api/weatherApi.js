@@ -18,8 +18,6 @@ const toWeatherItem = (cityMeta, data) => ({
   name: cityMeta.name,
   region: cityMeta.region,
   temp: Math.round(data.main.temp),
-  tempMin: Math.round(data.main.temp_min),
-  tempMax: Math.round(data.main.temp_max),
   status: data.weather?.[0]?.description ?? '정보 없음',
   humidity: data.main.humidity,
   windSpeed: data.wind?.speed ?? 0,

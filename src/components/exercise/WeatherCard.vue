@@ -21,8 +21,6 @@ const { timeLabel, phase } = useLocalTime(() => props.cityItem)
 const iconUrl = computed(() => getWeatherIcon(props.cityItem.icon))
 
 const displayTemp = computed(() => configStore.toDisplayTemp(props.cityItem.temp))
-const displayTempMin = computed(() => configStore.toDisplayTemp(props.cityItem.tempMin))
-const displayTempMax = computed(() => configStore.toDisplayTemp(props.cityItem.tempMax))
 
 const tempLevel = computed(() => {
   const celsius = props.cityItem.temp
@@ -62,9 +60,6 @@ const tempLevel = computed(() => {
 
     <footer class="card-foot">
       <span class="city-status text-secondary">{{ cityItem.status }}</span>
-      <span v-if="cityItem.tempMax != null" class="temp-range text-secondary">
-        최고 {{ displayTempMax }}° 최저 {{ displayTempMin }}°
-      </span>
     </footer>
   </article>
 </template>
@@ -222,13 +217,7 @@ const tempLevel = computed(() => {
   margin-top: auto;
 }
 
-.city-status,
-.temp-range {
+.city-status {
   font-size: var(--font-size-sm);
-}
-
-.temp-range {
-  flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
 }
 </style>

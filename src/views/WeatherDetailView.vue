@@ -82,12 +82,15 @@ const displayTemp = computed(() =>
 const displayFeelsLike = computed(() =>
   cityDetail.value ? configStore.toDisplayTemp(cityDetail.value.feelsLike) : null,
 )
-const displayTempMin = computed(() =>
-  cityDetail.value ? configStore.toDisplayTemp(cityDetail.value.tempMin) : null,
-)
-const displayTempMax = computed(() =>
-  cityDetail.value ? configStore.toDisplayTemp(cityDetail.value.tempMax) : null,
-)
+const forecastRange = computed(() => {
+  if (!forecast.value) return null
+
+  const temps = forecast.value.points.map((point) => point.temp)
+  return {
+    max: configStore.toDisplayTemp(Math.max(...temps)),
+    min: configStore.toDisplayTemp(Math.min(...temps)),
+  }
+})
 
 const tempLevel = computed(() => {
   if (!cityDetail.value) return 'mild'
@@ -141,7 +144,10 @@ const toLocalClock = (utcSeconds) => {
         </div>
 
         <p class="hero-status">
-          {{ cityDetail.status }} · 최고 {{ displayTempMax }}° 최저 {{ displayTempMin }}°
+          {{ cityDetail.status }}
+          <template v-if="forecastRange">
+            · 최고 {{ forecastRange.max }}° 최저 {{ forecastRange.min }}°
+          </template>
         </p>
       </header>
 

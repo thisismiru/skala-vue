@@ -35,7 +35,6 @@ const themeOverrides = {
         <nav class="app-nav">
           <RouterLink to="/">대시보드</RouterLink>
           <RouterLink to="/about">소개</RouterLink>
-          <RouterLink to="/practices">실습</RouterLink>
         </nav>
         <UnitToggler class="nav-unit" />
       </header>
