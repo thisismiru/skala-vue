@@ -2,6 +2,9 @@
 import AxiosJson from '@/components/practices/library/AxiosJson.vue'
 import AxiosWeather from '@/components/practices/library/AxiosWeather.vue'
 import StoreCounter from '@/components/practices/library/StoreCounter.vue'
+import ElementPlusForm from '@/components/practices/library/ElementPlusForm.vue'
+import ElementPlusCommerce from '@/components/practices/library/ElementPlusCommerce.vue'
+import ElementPlusFeedback from '@/components/practices/library/ElementPlusFeedback.vue'
 
 // 교재 Code Challenge 실습 컴포넌트를 이곳에 등록한다.
 </script>
@@ -15,6 +18,9 @@ import StoreCounter from '@/components/practices/library/StoreCounter.vue'
     <StoreCounter />
     <AxiosWeather />
     <AxiosJson />
+    <ElementPlusForm />
+    <ElementPlusCommerce />
+    <ElementPlusFeedback />
   </section>
 </template>
 

@@ -320,3 +320,20 @@ label {
   background: var(--color-cool-bg);
   color: var(--color-cool);
 }
+
+:root {
+  --el-color-primary: var(--sk-red-500);
+  --el-color-primary-light-3: var(--sk-red-400);
+  --el-color-primary-light-5: var(--sk-red-300);
+  --el-color-primary-light-7: var(--sk-red-200);
+  --el-color-primary-light-8: var(--sk-red-100);
+  --el-color-primary-light-9: var(--sk-red-50);
+  --el-color-primary-dark-2: var(--sk-red-600);
+
+  --el-color-danger: var(--color-danger);
+  --el-color-success: var(--color-success);
+  --el-color-warning: var(--color-warning);
+
+  --el-border-radius-base: var(--radius-sm);
+  --el-font-size-base: var(--font-size-base);
+}
