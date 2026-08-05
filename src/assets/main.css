@@ -337,3 +337,103 @@ label {
   --el-border-radius-base: var(--radius-sm);
   --el-font-size-base: var(--font-size-base);
 }
+
+.glass {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 42%);
+  pointer-events: none;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass {
+    background: rgba(255, 255, 255, 0.24);
+  }
+}
+
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.sky-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--sky-night);
+}
+
+.sky-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease);
+  will-change: opacity;
+}
+
+.sky-layer.is-active {
+  opacity: 1;
+}
+
+.sky-layer.is-dawn {
+  background: var(--sky-dawn);
+}
+
+.sky-layer.is-morning {
+  background: var(--sky-morning);
+}
+
+.sky-layer.is-day {
+  background: var(--sky-day);
+}
+
+.sky-layer.is-sunset {
+  background: var(--sky-sunset);
+}
+
+.sky-layer.is-night {
+  background: var(--sky-night);
+}
+
+.sky-shell,
+.sky-shell :where(h1, h2, h3, h4, p, span, label, dt, dd, strong) {
+  color: var(--text-primary);
+  text-shadow: var(--text-shadow);
+}
+
+.sky-shell :where(.text-secondary) {
+  color: var(--text-secondary);
+}
+
+.sky-shell :where(.text-tertiary) {
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 640px) {
+  .glass {
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

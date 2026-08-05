@@ -1,24 +1,47 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { computed } from 'vue'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import UnitToggler from '@/components/exercise/UnitToggler.vue'
+import { useSky, SKY_PHASES } from '@/composables/useSky'
+
+const route = useRoute()
+
+const isPlain = computed(() => route.path.startsWith('/practices'))
+
+const { phase } = useSky()
+
+const themeOverrides = {}
 </script>
 
 <template>
-  <header class="app-header">
-    <h1 class="app-title">🌤️ 과제 4: 라우터 적용</h1>
-    <nav class="app-nav">
-      <RouterLink to="/">🗺️ 날씨 대시보드</RouterLink>
-      <span class="nav-divider">|</span>
-      <RouterLink to="/about">ℹ️ 서비스 소개</RouterLink>
-      <span class="nav-divider">|</span>
-      <RouterLink to="/practices">🧪 실습</RouterLink>
+  <n-config-provider :theme-overrides="themeOverrides">
+    <div :class="isPlain ? 'plain-shell' : 'sky-shell'">
+      <div v-if="!isPlain" class="sky-backdrop">
+        <div
+          v-for="skyPhase in SKY_PHASES"
+          :key="skyPhase"
+          class="sky-layer"
+          :class="[`is-${skyPhase}`, { 'is-active': skyPhase === phase }]"
+        ></div>
+      </div>
 
-      <UnitToggler class="nav-unit" />
-    </nav>
-  </header>
-  <main class="app-main">
-    <RouterView />
-  </main>
+      <header class="app-header">
+        <h1 class="app-title">🌤️ 과제 4: 라우터 적용</h1>
+        <nav class="app-nav">
+          <RouterLink to="/">🗺️ 날씨 대시보드</RouterLink>
+          <span class="nav-divider">|</span>
+          <RouterLink to="/about">ℹ️ 서비스 소개</RouterLink>
+          <span class="nav-divider">|</span>
+          <RouterLink to="/practices">🧪 실습</RouterLink>
+
+          <UnitToggler class="nav-unit" />
+        </nav>
+      </header>
+      <main class="app-main">
+        <RouterView />
+      </main>
+    </div>
+  </n-config-provider>
 </template>
 
 <style scoped>
@@ -26,6 +49,24 @@ import UnitToggler from '@/components/exercise/UnitToggler.vue'
   padding-bottom: var(--space-4);
   margin-bottom: var(--space-5);
   border-bottom: 1px solid var(--color-border-soft);
+}
+
+.sky-shell .app-header {
+  border-bottom-color: var(--glass-border);
+}
+
+.sky-shell .app-nav a {
+  color: var(--text-secondary);
+}
+
+.sky-shell .app-nav a:hover,
+.sky-shell .app-nav a.router-link-exact-active {
+  color: var(--text-primary);
+  border-bottom-color: var(--text-primary);
+}
+
+.sky-shell .nav-divider {
+  color: var(--text-tertiary);
 }
 
 .app-title {

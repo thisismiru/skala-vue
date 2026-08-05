@@ -97,6 +97,32 @@
 
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --duration: 0.18s;
+  --duration-slow: 1.2s;
+}
+
+:root {
+  --sky-dawn: linear-gradient(165deg, #3d4a7a 0%, #b56576 55%, #e8a87c 100%);
+  --sky-morning: linear-gradient(165deg, #4a9fd8 0%, #94cdec 55%, #ffe0b2 100%);
+  --sky-day: linear-gradient(165deg, #1e6fc4 0%, #5aa9e0 55%, #a8d8f5 100%);
+  --sky-sunset: linear-gradient(165deg, #1f2847 0%, #a84a52 55%, #e89b4f 100%);
+  --sky-night: linear-gradient(165deg, #0b1120 0%, #16223f 55%, #26355c 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.13);
+  --glass-bg-hover: rgba(255, 255, 255, 0.19);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-blur: 18px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+
+  --temp-hot: #ff8a5b;
+  --temp-warm: #ffc978;
+  --temp-mild: #7fd8be;
+  --temp-cool: #78b6e8;
+  --temp-cold: #9db8e8;
+
+  --text-primary: rgba(255, 255, 255, 0.96);
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-tertiary: rgba(255, 255, 255, 0.5);
+  --text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 *,

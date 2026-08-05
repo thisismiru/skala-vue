@@ -1,7 +1,16 @@
 export const CITIES = [
-  { id: 'city_01', name: '서울', query: 'Seoul', region: '대한민국 서울특별시' },
-  { id: 'city_02', name: '수원', query: 'Suwon', region: '대한민국 경기도 수원시' },
-  { id: 'city_03', name: '부산', query: 'Busan', region: '대한민국 부산광역시' },
+  { id: 'seoul', name: '서울', query: 'Seoul,KR', region: '아시아' },
+  { id: 'tokyo', name: '도쿄', query: 'Tokyo,JP', region: '아시아' },
+  { id: 'singapore', name: '싱가포르', query: 'Singapore,SG', region: '아시아' },
+  { id: 'dubai', name: '두바이', query: 'Dubai,AE', region: '아시아' },
+  { id: 'london', name: '런던', query: 'London,GB', region: '유럽' },
+  { id: 'paris', name: '파리', query: 'Paris,FR', region: '유럽' },
+  { id: 'newyork', name: '뉴욕', query: 'New York,US', region: '아메리카' },
+  { id: 'losangeles', name: '로스앤젤레스', query: 'Los Angeles,US', region: '아메리카' },
+  { id: 'saopaulo', name: '상파울루', query: 'Sao Paulo,BR', region: '아메리카' },
+  { id: 'sydney', name: '시드니', query: 'Sydney,AU', region: '오세아니아' },
 ]
+
+export const REGIONS = ['전체', '아시아', '유럽', '아메리카', '오세아니아']
 
 export const findCityById = (cityId) => CITIES.find((city) => city.id === cityId)

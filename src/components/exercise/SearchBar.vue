@@ -31,19 +31,30 @@ const handleInput = (e) => {
 .search-input {
   width: 100%;
   padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  color: var(--text-primary);
   font-size: var(--font-size-base);
-  transition: border-color var(--duration) var(--ease);
+  transition:
+    border-color var(--duration) var(--ease),
+    background-color var(--duration) var(--ease);
 }
+
+.search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
 .search-input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-focus);
+  border-color: var(--text-primary);
+  background: var(--glass-bg-hover);
 }
+
 .search-echo {
+  position: relative;
   margin-top: var(--space-2);
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
 }
 </style>
